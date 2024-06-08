@@ -21,4 +21,7 @@ router.post("/create", [
   noteController.createNote,
 ]);
 
+// GET /notes/:id
+router.get("/notes/:id", noteController.getNote);
+
 module.exports = router;
