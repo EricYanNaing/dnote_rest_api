@@ -52,3 +52,19 @@ exports.getNote = (req, res, next) => {
       console.log(err);
     });
 };
+
+exports.deleteNote = (req, res, next) => {
+  const { id } = req.params;
+  Note.findByIdAndDelete(id)
+    .then((_) => {
+      res.status(202).json({
+        message: "Post Deleted.",
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(404).json({
+        message: "Something went wrong.",
+      });
+    });
+};

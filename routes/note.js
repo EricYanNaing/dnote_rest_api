@@ -24,4 +24,7 @@ router.post("/create", [
 // GET /notes/:id
 router.get("/notes/:id", noteController.getNote);
 
+// Delete 
+router.delete("/delete/:id", noteController.deleteNote);
+
 module.exports = router;
