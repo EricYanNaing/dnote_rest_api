@@ -14,6 +14,7 @@ exports.getNotes = (req, res, next) => {
 
 exports.createNote = (req, res, next) => {
   const { title, content } = req.body;
+  const cover_image = req.file;
 
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -26,6 +27,7 @@ exports.createNote = (req, res, next) => {
   Note.create({
     title,
     content,
+    cover_image: cover_image ? cover_image.path : "",
     author: "Annoymous",
   })
     .then((_) => {
