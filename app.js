@@ -7,6 +7,7 @@ const path = require("path");
 
 // import routes
 const noteRoute = require("./routes/note");
+const authRoute = require("./routes/auth");
 
 //connect mongodb
 const mongoose = require("mongoose");
@@ -45,6 +46,7 @@ app.use(
 );
 
 app.use(noteRoute);
+app.use(authRoute);
 
 mongoose
   .connect(process.env.MONGO_URL)
