@@ -3,10 +3,25 @@ const Note = require("../models/note");
 const { removeImg } = require("../utlis/remove_cv");
 
 exports.getNotes = (req, res, next) => {
+  const currentPage = req.query.page || 1;
+  const perPage = 4;
+  let totalNotes;
+  let totalPages;
+
   Note.find()
-    .sort({ createdAt: -1 })
+    .countDocuments()
+    .then((counts) => {
+      totalNotes = counts;
+      // totalNotes = 12
+      // totalpages = totalNotes / perPage
+      totalPages = Math.ceil(totalNotes / perPage);
+      return Note.find()
+        .sort({ createdAt: -1 })
+        .skip((currentPage - 1) * perPage)
+        .limit(perPage);
+    })
     .then((notes) => {
-      return res.status(200).json(notes);
+      return res.status(200).json({ notes, totalNotes, totalPages });
     })
     .catch((err) => {
       console.log(err);
