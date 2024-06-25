@@ -3,6 +3,9 @@ const { validationResult } = require("express-validator");
 
 const User = require("../models/user");
 
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
+
 exports.register = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -58,7 +61,13 @@ exports.login = async (req, res, next) => {
         message: "Email or password doesn't match.",
       });
     }
-    return res.status(200).json({ message: "Login Success." });
+
+    const token = jwt.sign(
+      { email: userDoc.email, userId: userDoc._id },
+      process.env.JWT_KEY,
+      { expiresIn: "1hr" }
+    );
+    return res.status(200).json({ token, userId: userDoc._id });
   } catch (err) {
     return res.status(401).json({
       message: "Email or password doesn't match.",
