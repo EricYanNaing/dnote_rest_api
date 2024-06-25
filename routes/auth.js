@@ -42,4 +42,17 @@ router.post(
   authController.register
 );
 
+//Post Login
+router.post(
+  "/login",
+  [
+    body("email").isEmail().withMessage("Email is invalid."),
+    body("password")
+      .trim()
+      .isLength({ min: 3 })
+      .withMessage("Password is too short."),
+  ],
+  authController.login
+);
+
 module.exports = router;
