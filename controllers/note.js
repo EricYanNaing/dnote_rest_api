@@ -44,7 +44,7 @@ exports.createNote = (req, res, next) => {
     title,
     content,
     cover_image: cover_image ? cover_image.path : "",
-    author: "Annoymous",
+    author: req.userId,
   })
     .then((_) => {
       return res.status(201).json({
@@ -63,6 +63,7 @@ exports.createNote = (req, res, next) => {
 exports.getNote = (req, res, next) => {
   const { id } = req.params;
   Note.findById(id)
+    .populate("author", "userName")
     .then((note) => {
       return res.status(200).json(note);
     })
@@ -78,7 +79,9 @@ exports.deleteNote = (req, res, next) => {
   const { id } = req.params;
   Note.findById(id)
     .then((note) => {
-      removeImg(note.cover_image);
+      if (note.cover_image) {
+        removeImg(note.cover_image);
+      }
       return Note.findByIdAndDelete(id).then((_) => {
         res.status(202).json({
           message: "Post Deleted.",
@@ -115,7 +118,9 @@ exports.updateNote = (req, res, next) => {
       note.title = title;
       note.content = content;
       if (cover_image) {
-        removeImg(note.cover_image);
+        if (note.cover_image) {
+          removeImg(note.cover_image);
+        }
         note.cover_image = cover_image.path;
       }
       note.save();
