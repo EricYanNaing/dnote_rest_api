@@ -67,7 +67,9 @@ exports.login = async (req, res, next) => {
       process.env.JWT_KEY,
       { expiresIn: "1hr" }
     );
-    return res.status(200).json({ token, userId: userDoc._id });
+    return res
+      .status(200)
+      .json({ token, userId: userDoc._id, user_mail: userDoc.email });
   } catch (err) {
     return res.status(401).json({
       message: "Email or password doesn't match.",
